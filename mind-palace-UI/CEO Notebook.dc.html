@@ -1,0 +1,701 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+<template id="__bundler_thumbnail" data-bg-color="#F1EEE4">
+  <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <rect x="360" y="170" width="480" height="500" rx="28" fill="#ffffff" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
+    <rect x="360" y="170" width="150" height="500" rx="28" fill="#141418"/>
+    <rect x="390" y="250" width="92" height="20" rx="10" fill="#2B7AF3"/>
+    <rect x="390" y="300" width="92" height="14" rx="7" fill="#3A3A42"/>
+    <rect x="390" y="338" width="92" height="14" rx="7" fill="#3A3A42"/>
+    <rect x="390" y="376" width="92" height="14" rx="7" fill="#3A3A42"/>
+    <rect x="560" y="240" width="230" height="22" rx="11" fill="#F3F3F5"/>
+    <rect x="560" y="296" width="190" height="14" rx="7" fill="#8A8F99"/>
+    <rect x="560" y="360" width="110" height="96" rx="12" fill="#FCF7E9" stroke="rgba(17,24,39,0.07)" stroke-width="2"/>
+    <rect x="690" y="360" width="110" height="96" rx="12" fill="#FCF7E9" stroke="rgba(17,24,39,0.07)" stroke-width="2"/>
+    <circle cx="600" cy="120" r="34" fill="#4D91F2"/>
+  </svg>
+</template>
+</head>
+<body>
+<x-dc>
+<helmet>
+  <link rel="stylesheet" href="_ds/eko-design-system-edae4f23-498d-4793-9c49-5342fc419881/colors_and_type.css">
+  <style>
+    html, body { margin: 0; padding: 0; }
+    * { box-sizing: border-box; }
+    ::placeholder { color: #5E636B; }
+    @keyframes ekoFade { 0% { opacity:0; transform:translateY(5px); } 14% { opacity:1; transform:none; } 78% { opacity:1; transform:none; } 100% { opacity:0; transform:translateY(-2px); } }
+    @keyframes typingDot { 0%, 80%, 100% { opacity:0.3; transform:scale(0.7); } 40% { opacity:1; transform:scale(1); } }
+    @keyframes msgIn { 0% { opacity:0; transform:translateY(8px); } 100% { opacity:1; transform:none; } }
+    @keyframes msgRise { 0% { opacity:0; transform:translateY(10px); } 100% { opacity:1; transform:none; } }
+    /* hero entrance */
+    @keyframes heroLogoIn { 0% { opacity:0; transform:scale(0.72) translateY(24px); } 100% { opacity:1; transform:scale(1) translateY(0); } }
+    @keyframes heroTitleIn { 0% { opacity:0; transform:translateY(18px); } 100% { opacity:1; transform:translateY(0); } }
+    @keyframes heroBoxIn { 0% { opacity:0; transform:translateY(26px) scale(0.97); } 100% { opacity:1; transform:translateY(0) scale(1); } }
+    /* logo idle float */
+    @keyframes logoFloat { 0%,100% { transform:translateY(0px) rotate(-1deg); } 50% { transform:translateY(-12px) rotate(1deg); } }
+    /* dot-grid shimmer */
+    @keyframes dotPulse { 0%,100% { opacity:0.10; } 50% { opacity:0.22; } }
+    /* send button spark */
+    @keyframes sendPop { 0% { transform:scale(1); } 30% { transform:scale(1.35) rotate(-8deg); } 60% { transform:scale(0.9) rotate(4deg); } 100% { transform:scale(1) rotate(0deg); } }
+    /* particle burst */
+    @keyframes particleOut { 0% { opacity:1; transform:translate(0,0) scale(1); } 100% { opacity:0; transform:var(--tx,40px,0) scale(0); } }
+    /* input glow pulse on focus */
+    @keyframes boxGlow { 0%,100% { box-shadow:0 18px 50px rgba(0,0,0,0.45); } 50% { box-shadow:0 18px 50px rgba(0,0,0,0.45),0 0 0 3px rgba(43,122,243,0.28); } }
+    /* chat fade-in from bottom */
+    @keyframes chatIn { 0% { opacity:0; transform:translateY(32px); } 100% { opacity:1; transform:translateY(0); } }
+    .hero-logo { animation: heroLogoIn .72s cubic-bezier(0.16,1,0.3,1) both, logoFloat 5s ease-in-out 1s infinite; }
+    .hero-title { animation: heroTitleIn .6s cubic-bezier(0.16,1,0.3,1) .12s both; }
+    .hero-box  { animation: heroBoxIn .65s cubic-bezier(0.16,1,0.3,1) .22s both; }
+    .hero-box:focus-within { animation: heroBoxIn .65s cubic-bezier(0.16,1,0.3,1) .22s both, boxGlow 2.4s ease-in-out 1s infinite; }
+    .send-pop  { animation: sendPop .38s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+    .dot-grid  { animation: dotPulse 6s ease-in-out infinite; }
+    .chat-avatar { animation: heroLogoIn .5s cubic-bezier(0.16,1,0.3,1) both; }
+  </style>
+</helmet>
+
+<div style="height:100vh; height:100dvh; width:100%; background:#0E0E12; font-family:'Montserrat','Segoe UI',system-ui,sans-serif; display:flex; flex-direction:column; align-items:center;">
+
+  <!-- notebook card -->
+  <div style="width:100%; flex:1 1 auto; min-height:0; background:#0E0E12; display:flex; align-items:stretch; overflow:hidden;">
+
+    <!-- rail -->
+    <nav style="width:252px; flex:none; padding:30px 22px; display:flex; flex-direction:column; overflow-y:auto; background:#141418; border-right:1px solid rgba(255,255,255,0.08);">
+      <div style="font-size:11px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:#7E838D; margin:4px 8px 14px;">Sections</div>
+      <div style="display:flex; flex-direction:column; gap:4px;">
+
+        <sc-if value="{{ isCapture }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ goCapture }}" style="{{ navActiveStyle }}">
+          <span>Capture</span>
+        </button>
+        </sc-if>
+        <sc-if value="{{ notCapture }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ goCapture }}" style="{{ navIdleStyle }}">
+          <span>Capture</span>
+        </button>
+        </sc-if>
+
+        <sc-if value="{{ isNext }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ goNext }}" style="{{ navActiveStyle }}">
+          <span>Next Actions</span>
+          <sc-if value="{{ nextCount }}" hint-placeholder-val="{{ false }}"><span style="flex:none; min-width:21px; height:21px; padding:0 6px; display:inline-flex; align-items:center; justify-content:center; border-radius:9999px; background:#26262E; color:#AEB3BC; font-size:11.5px; font-weight:700;">{{ nextCount }}</span></sc-if>
+        </button>
+        </sc-if>
+        <sc-if value="{{ notNext }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ goNext }}" style="{{ navIdleStyle }}">
+          <span>Next Actions</span>
+          <sc-if value="{{ nextCount }}" hint-placeholder-val="{{ false }}"><span style="flex:none; min-width:21px; height:21px; padding:0 6px; display:inline-flex; align-items:center; justify-content:center; border-radius:9999px; background:#26262E; color:#AEB3BC; font-size:11.5px; font-weight:700;">{{ nextCount }}</span></sc-if>
+        </button>
+        </sc-if>
+
+        <sc-if value="{{ isWaiting }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ goWaiting }}" style="{{ navActiveStyle }}">
+          <span>Waiting For</span>
+          <sc-if value="{{ waitCount }}" hint-placeholder-val="{{ false }}"><span style="flex:none; min-width:21px; height:21px; padding:0 6px; display:inline-flex; align-items:center; justify-content:center; border-radius:9999px; background:#26262E; color:#AEB3BC; font-size:11.5px; font-weight:700;">{{ waitCount }}</span></sc-if>
+        </button>
+        </sc-if>
+        <sc-if value="{{ notWaiting }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ goWaiting }}" style="{{ navIdleStyle }}">
+          <span>Waiting For</span>
+          <sc-if value="{{ waitCount }}" hint-placeholder-val="{{ false }}"><span style="flex:none; min-width:21px; height:21px; padding:0 6px; display:inline-flex; align-items:center; justify-content:center; border-radius:9999px; background:#26262E; color:#AEB3BC; font-size:11.5px; font-weight:700;">{{ waitCount }}</span></sc-if>
+        </button>
+        </sc-if>
+
+        <sc-if value="{{ isReview }}" hint-placeholder-val="{{ false }}">
+        <button onClick="{{ goReview }}" style="{{ navActiveStyle }}">
+          <span>Weekly Review</span>
+        </button>
+        </sc-if>
+        <sc-if value="{{ notReview }}" hint-placeholder-val="{{ true }}">
+        <button onClick="{{ goReview }}" style="{{ navIdleStyle }}">
+          <span>Weekly Review</span>
+        </button>
+        </sc-if>
+
+      </div>
+
+      <div style="flex:1;"></div>
+
+      <div style="margin:0 8px; padding-top:18px; border-top:1px solid rgba(255,255,255,0.08);">
+        <div style="font-size:11px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#7E838D; margin-bottom:5px;">Last review</div>
+        <div style="font-size:13px; font-weight:600; color:#C2C7CF; margin-bottom:16px;">{{ lastReviewedLabel }}</div>
+        
+      </div>
+    </nav>
+
+    <!-- page area -->
+    <main style="flex:1; min-height:0; overflow-y:auto; overflow-x:hidden; padding:0; position:relative; background-color:#0E0E12; background-image:radial-gradient(rgba(255,255,255,0.10) 1.5px, transparent 1.5px); background-size:24px 24px;">
+
+      <!-- CAPTURE — AI assistant chat -->
+      <sc-if value="{{ isCapture }}" hint-placeholder-val="{{ true }}">
+      <div style="position:absolute; top:0; left:0; right:0; bottom:0; overflow:hidden;">
+
+        <!-- HERO — empty state -->
+        <div style="position:absolute; top:0; left:0; right:0; bottom:0; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:0 40px; opacity:{{ heroOpacity }}; transform:{{ heroTransform }}; pointer-events:{{ heroPE }}; transition:opacity .42s cubic-bezier(0.16,1,0.3,1), transform .6s cubic-bezier(0.16,1,0.3,1);">
+          <img src="assets/logo-custom.png" alt="" class="hero-logo" style="height:140px; width:140px; object-fit:contain; margin-bottom:0;">
+          <h2 class="hero-title" style="margin:0 0 24px; font-size:33px; font-weight:800; letter-spacing:-0.025em; color:#F3F3F5; line-height:1.1; text-align:center;">What's on your mind?</h2>
+          <div class="hero-box" style="width:100%; max-width:640px; background:#17171C; border:1px solid rgba(255,255,255,0.10); border-radius:24px; box-shadow:0 18px 50px rgba(0,0,0,0.45); padding:10px 12px 10px 22px; display:flex; align-items:center; gap:12px;">
+            <textarea ref="{{ heroCapRef }}" onKeyDown="{{ onHeroKey }}" onInput="{{ onCapInput }}" rows="1" placeholder="Drop anything here…" style="display:block; flex:1 1 auto; border:none; outline:none; resize:none; background:transparent; font-family:inherit; font-size:17px; font-weight:500; line-height:1.5; color:#F3F3F5; min-height:30px; max-height:200px; overflow-y:auto; text-align:left;"></textarea>
+            <button onClick="{{ heroSend }}" ref="{{ sendBtnRef }}" title="Send" style="flex:none; width:42px; height:42px; border-radius:50%; border:none; cursor:pointer; background:{{ accBg }}; color:#fff; font-size:20px; line-height:1; display:flex; align-items:center; justify-content:center; transition:background .18s ease, transform .18s ease;" style-hover="background:{{ accDeep }}; transform:translateY(-1px);">↑</button>
+          </div>
+        </div>
+
+        <!-- CHAT — conversation -->
+        <div style="position:absolute; top:0; left:0; right:0; bottom:0; display:flex; flex-direction:column; opacity:{{ chatOpacity }}; pointer-events:{{ chatPE }}; transition:opacity .45s cubic-bezier(0.16,1,0.3,1) .12s;">
+
+          <div ref="{{ chatScrollRef }}" style="flex:1 1 auto; min-height:0; overflow-y:auto; overflow-x:hidden; padding:32px 0 14px;">
+            <div style="max-width:720px; margin:0 auto; padding:0 40px; display:flex; flex-direction:column; gap:18px;">
+              <sc-for list="{{ chatMessages }}" as="msg" hint-placeholder-count="1">
+
+                <sc-if value="{{ msg.isAI }}" hint-placeholder-val="{{ true }}">
+                <div style="display:flex; gap:12px; align-items:flex-start; animation:msgRise .42s cubic-bezier(0.16,1,0.3,1) forwards;">
+                  <img src="assets/logo-custom.png" alt="" style="width:58px; height:58px; object-fit:contain; flex:none; margin-top:2px;">
+                  <div style="min-width:0;">
+                    <div style="display:inline-block; max-width:560px; background:#17171C; border:1px solid rgba(255,255,255,0.08); border-radius:5px 18px 18px 18px; padding:13px 17px; font-size:15px; font-weight:500; line-height:1.65; color:#ECEDEF; white-space:pre-wrap; overflow-wrap:break-word; word-break:break-word;">{{ msg.content }}</div>
+                    <sc-if value="{{ msg.hasCaptured }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex; flex-wrap:wrap; gap:6px; margin-top:9px;">
+                      <sc-for list="{{ msg.chips }}" as="chip" hint-placeholder-count="1">
+                        <span style="display:inline-flex; align-items:center; gap:6px; background:{{ chip.bg }}; border:1px solid {{ chip.border }}; border-radius:9999px; padding:4px 12px 4px 9px; font-size:11.5px; font-weight:600; color:{{ chip.color }};">
+                          <span style="font-size:9px;">{{ chip.icon }}</span>{{ chip.label }}
+                        </span>
+                      </sc-for>
+                    </div>
+                    </sc-if>
+                  </div>
+                </div>
+                </sc-if>
+
+                <sc-if value="{{ msg.isUser }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex; justify-content:flex-end; animation:msgRise .42s cubic-bezier(0.16,1,0.3,1) forwards;">
+                  <div style="background:#2A2A35; border-radius:18px 5px 18px 18px; padding:13px 17px; font-size:15px; font-weight:500; line-height:1.65; color:#F3F3F5; max-width:540px; white-space:pre-wrap; overflow-wrap:break-word; word-break:break-word;">{{ msg.content }}</div>
+                </div>
+                </sc-if>
+
+              </sc-for>
+
+              <sc-if value="{{ isTyping }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex; gap:12px; align-items:flex-start; animation:msgRise .42s cubic-bezier(0.16,1,0.3,1) forwards;">
+                <img src="assets/logo-custom.png" alt="" class="chat-avatar" style="width:58px; height:58px; object-fit:contain; flex:none; margin-top:2px;">
+                <div style="background:#17171C; border:1px solid rgba(255,255,255,0.08); border-radius:5px 18px 18px 18px; padding:16px 18px; display:inline-flex; gap:5px; align-items:center;">
+                  <span style="width:7px; height:7px; border-radius:50%; background:#8A8F99; animation:typingDot 1.2s infinite ease-in-out;"></span>
+                  <span style="width:7px; height:7px; border-radius:50%; background:#8A8F99; animation:typingDot 1.2s infinite ease-in-out; animation-delay:0.2s;"></span>
+                  <span style="width:7px; height:7px; border-radius:50%; background:#8A8F99; animation:typingDot 1.2s infinite ease-in-out; animation-delay:0.4s;"></span>
+                </div>
+              </div>
+              </sc-if>
+            </div>
+          </div>
+
+          <div style="flex:none; padding:14px 0 20px;">
+            <div style="max-width:720px; margin:0 auto; padding:0 40px;">
+              <div style="background:#17171C; border:1px solid rgba(255,255,255,0.10); border-radius:24px; box-shadow:0 14px 40px rgba(0,0,0,0.4); padding:10px 12px 10px 22px; display:flex; align-items:center; gap:12px;">
+                <textarea ref="{{ capRef }}" onKeyDown="{{ onCapKey }}" onInput="{{ onCapInput }}" rows="1" placeholder="Message your assistant…" style="display:block; flex:1 1 auto; border:none; outline:none; resize:none; background:transparent; font-family:inherit; font-size:16px; font-weight:500; line-height:1.5; color:#F3F3F5; min-height:28px; max-height:160px; overflow-y:auto; text-align:left;"></textarea>
+                <button onClick="{{ addCapture }}" ref="{{ chatSendBtnRef }}" title="Send" style="flex:none; width:42px; height:42px; border-radius:50%; border:none; cursor:pointer; background:{{ accBg }}; color:#fff; font-size:20px; line-height:1; display:flex; align-items:center; justify-content:center; transition:background .18s ease, transform .18s ease;" style-hover="background:{{ accDeep }}; transform:translateY(-1px);">↑</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+      </sc-if>
+
+      <!-- NEXT ACTIONS -->
+      <sc-if value="{{ isNext }}" hint-placeholder-val="{{ false }}">
+      <div style="width:100%; max-width:760px; margin:0 auto; padding:44px 52px 48px;">
+        <div style="font-size:11px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:{{ accColor }}; margin-bottom:10px;">Next Actions</div>
+        <h2 style="margin:0 0 6px; font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#F3F3F5; line-height:1.15;">What you'll actually do next</h2>
+        <p style="margin:0 0 26px; font-size:15px; font-weight:500; line-height:1.55; color:#AEB3BC;">Concrete, physical next steps. Pick by where you are, the time you have, and what matters most.</p>
+
+        <div style="display:flex; gap:10px; margin-bottom:8px;">
+          <input ref="{{ nextRef }}" onKeyDown="{{ onNextKey }}" placeholder="Add a next action…" style="flex:1; height:46px; border:1px solid rgba(255,255,255,0.10); background:#1C1C22; border-radius:12px; padding:0 16px; font-family:inherit; font-size:15px; font-weight:500; color:#F3F3F5; outline:none;" style-focus="border-color:{{ accColor }};">
+          <button onClick="{{ addNext }}" style="flex:none; border:none; cursor:pointer; font-family:inherit; font-size:14px; font-weight:700; color:#fff; background:{{ accBg }}; padding:0 22px; border-radius:12px; transition:background .18s ease;" style-hover="background:{{ accDeep }};">Add</button>
+        </div>
+
+        <sc-if value="{{ nextHasItems }}" hint-placeholder-val="{{ true }}">
+        <div style="margin-top:8px;">
+          <sc-for list="{{ nextRows }}" as="row" hint-placeholder-count="4">
+            <div style="display:flex; align-items:center; gap:14px; padding:15px 6px; border-bottom:1px solid rgba(255,255,255,0.07);">
+              <button onClick="{{ row.toggle }}" title="Mark done" style="flex:none; width:22px; height:22px; border-radius:50%; border:2px solid #3A3A42; background:#0E0E12; cursor:pointer; padding:0; transition:border-color .15s ease, background .15s ease;" style-hover="border-color:{{ accColor }}; background:{{ accSoft }};"></button>
+              <span style="flex:1; font-size:15.5px; font-weight:500; color:#F3F3F5; line-height:1.4;">{{ row.text }}</span>
+              <span style="flex:none; font-size:12px; font-weight:500; color:#80858E;">{{ row.when }}</span>
+              <button onClick="{{ row.remove }}" title="Trash" style="flex:none; border:none; cursor:pointer; background:transparent; color:#5E636B; font-size:18px; line-height:1; padding:2px 5px; border-radius:6px; transition:color .15s ease;" style-hover="color:#E11D48;">×</button>
+            </div>
+          </sc-for>
+        </div>
+        <sc-if value="{{ hasDoneToday }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:18px; font-size:13px; font-weight:600; color:{{ accColor }};">✓ {{ doneTodayLabel }}</div>
+        </sc-if>
+        </sc-if>
+        <sc-if value="{{ nextEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align:center; padding:40px 20px; font-size:14.5px; font-weight:500; color:#8A8F99;">Nothing queued. Clarify something from your inbox, or add an action above.</div>
+        </sc-if>
+      </div>
+      </sc-if>
+
+      <!-- WAITING FOR -->
+      <sc-if value="{{ isWaiting }}" hint-placeholder-val="{{ false }}">
+      <div style="width:100%; max-width:760px; margin:0 auto; padding:44px 52px 48px;">
+        <div style="font-size:11px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:{{ accColor }}; margin-bottom:10px;">Waiting For</div>
+        <h2 style="margin:0 0 6px; font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#F3F3F5; line-height:1.15;">Things other people owe you</h2>
+        <p style="margin:0 0 26px; font-size:15px; font-weight:500; line-height:1.55; color:#AEB3BC;">Hand it off, then track it here. Review on your weekly cadence and nudge anything overdue.</p>
+
+        <div style="display:flex; gap:10px; margin-bottom:8px;">
+          <input ref="{{ waitWhatRef }}" onKeyDown="{{ onWaitKey }}" placeholder="What are you waiting on?" style="flex:1.6; height:46px; border:1px solid rgba(255,255,255,0.10); background:#1C1C22; border-radius:12px; padding:0 16px; font-family:inherit; font-size:15px; font-weight:500; color:#F3F3F5; outline:none;" style-focus="border-color:{{ accColor }};">
+          <input ref="{{ waitWhoRef }}" onKeyDown="{{ onWaitKey }}" placeholder="From whom?" style="flex:1; height:46px; border:1px solid rgba(255,255,255,0.10); background:#1C1C22; border-radius:12px; padding:0 16px; font-family:inherit; font-size:15px; font-weight:500; color:#F3F3F5; outline:none;" style-focus="border-color:{{ accColor }};">
+          <button onClick="{{ addWaiting }}" style="flex:none; border:none; cursor:pointer; font-family:inherit; font-size:14px; font-weight:700; color:#fff; background:{{ accBg }}; padding:0 22px; border-radius:12px; transition:background .18s ease;" style-hover="background:{{ accDeep }};">Add</button>
+        </div>
+
+        <sc-if value="{{ waitHasItems }}" hint-placeholder-val="{{ true }}">
+        <div style="margin-top:8px;">
+          <sc-for list="{{ waitRows }}" as="row" hint-placeholder-count="4">
+            <div style="display:flex; align-items:center; gap:14px; padding:15px 6px; border-bottom:1px solid rgba(255,255,255,0.07);">
+              <span style="flex:none; width:9px; height:9px; border-radius:50%; background:#FBBF24;"></span>
+              <div style="flex:1; min-width:0;">
+                <div style="font-size:15.5px; font-weight:500; color:#F3F3F5; line-height:1.4;">{{ row.text }}</div>
+                <sc-if value="{{ row.hasWho }}" hint-placeholder-val="{{ true }}"><div style="font-size:12.5px; font-weight:600; color:#8A8F99; margin-top:2px;">from {{ row.who }}</div></sc-if>
+              </div>
+              <span style="flex:none; font-size:12px; font-weight:500; color:#80858E;">waiting {{ row.since }}</span>
+              <button onClick="{{ row.got }}" title="Received it" style="flex:none; display:inline-flex; align-items:center; gap:3px; border:none; cursor:pointer; font-family:inherit; font-size:12px; font-weight:600; color:{{ accColor }}; background:{{ accSoft }}; padding:6px 11px; border-radius:8px; transition:filter .15s ease;" style-hover="filter:brightness(0.96);">Got it</button>
+              <button onClick="{{ row.remove }}" title="Trash" style="flex:none; border:none; cursor:pointer; background:transparent; color:#5E636B; font-size:18px; line-height:1; padding:2px 5px; border-radius:6px; transition:color .15s ease;" style-hover="color:#E11D48;">×</button>
+            </div>
+          </sc-for>
+        </div>
+        </sc-if>
+        <sc-if value="{{ waitEmpty }}" hint-placeholder-val="{{ false }}">
+        <div style="text-align:center; padding:40px 20px; font-size:14.5px; font-weight:500; color:#8A8F99;">Nobody owes you anything right now. The ball's in your court.</div>
+        </sc-if>
+      </div>
+      </sc-if>
+
+      <!-- WEEKLY REVIEW -->
+      <sc-if value="{{ isReview }}" hint-placeholder-val="{{ false }}">
+      <div style="width:100%; max-width:780px; margin:0 auto; padding:44px 52px 48px;">
+        <div style="font-size:11px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:{{ accColor }}; margin-bottom:10px;">Weekly Review</div>
+        <h2 style="margin:0 0 6px; font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#F3F3F5; line-height:1.15;">Keep the system trustworthy</h2>
+        <p style="margin:0 0 26px; font-size:15px; font-weight:500; line-height:1.55; color:#AEB3BC;">Once a week, clean it all. What's stuck, what's overdue, what matters now. This is what makes you trust the system enough to let go.</p>
+
+        <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; margin-bottom:30px;">
+          <div style="background:#1C1C22; border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:16px 18px;">
+            <div style="font-size:32px; font-weight:800; letter-spacing:-0.02em; color:#F3F3F5; line-height:1;">{{ somedayCount }}</div>
+            <div style="font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:#8A8F99; margin-top:6px;">Someday / maybe</div>
+          </div>
+          <div style="background:#1C1C22; border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:16px 18px;">
+            <div style="font-size:32px; font-weight:800; letter-spacing:-0.02em; color:#F3F3F5; line-height:1;">{{ nextCount }}</div>
+            <div style="font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:#8A8F99; margin-top:6px;">Next actions</div>
+          </div>
+          <div style="background:#1C1C22; border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:16px 18px;">
+            <div style="font-size:32px; font-weight:800; letter-spacing:-0.02em; color:#F3F3F5; line-height:1;">{{ waitCount }}</div>
+            <div style="font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:#8A8F99; margin-top:6px;">Waiting for</div>
+          </div>
+          <div style="background:#1C1C22; border:1px solid rgba(255,255,255,0.08); border-radius:16px; padding:16px 18px;">
+            <div style="font-size:32px; font-weight:800; letter-spacing:-0.02em; color:{{ accColor }}; line-height:1;">{{ doneWeekCount }}</div>
+            <div style="font-size:11px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:#8A8F99; margin-top:6px;">Done this week</div>
+          </div>
+        </div>
+
+        <div style="font-size:15px; font-weight:700; color:#F3F3F5; margin-bottom:14px;">The ritual</div>
+        <div style="display:flex; flex-direction:column; gap:10px;">
+          <sc-for list="{{ reviewSteps }}" as="step" hint-placeholder-count="4">
+            <button onClick="{{ step.toggle }}" style="display:flex; align-items:flex-start; gap:14px; width:100%; text-align:left; background:#141418; border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:16px 18px; cursor:pointer; font-family:inherit; transition:background .15s ease;" style-hover="background:#202028;">
+              <span style="flex:none; width:26px; height:26px; border-radius:7px; border:2px solid {{ step.boxBorder }}; background:{{ step.boxBg }}; display:flex; align-items:center; justify-content:center; color:#fff; margin-top:1px;">
+                <sc-if value="{{ step.checked }}" hint-placeholder-val="{{ false }}"><span style="font-size:14px; font-weight:800; line-height:1;">✓</span></sc-if>
+              </span>
+              <span style="flex:1;">
+                <span style="display:block; font-size:15px; font-weight:700; color:#F3F3F5;">{{ step.title }}</span>
+                <span style="display:block; font-size:13px; font-weight:500; color:#AEB3BC; margin-top:2px; line-height:1.45;">{{ step.desc }}</span>
+              </span>
+            </button>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ allReviewed }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:22px; display:flex; align-items:center; gap:18px; background:{{ accSoft }}; border-radius:16px; padding:18px 22px;">
+          <img src="assets/logo-custom.png" alt="" style="height:48px; width:48px; object-fit:contain;">
+          <div style="flex:1;">
+            <div style="font-size:15.5px; font-weight:800; color:#F3F3F5;">Your system is trustworthy again.</div>
+            <div style="font-size:13px; font-weight:500; color:#AEB3BC; margin-top:1px;">Close the loop and start the week clean.</div>
+          </div>
+          <button onClick="{{ completeReview }}" style="flex:none; border:none; cursor:pointer; font-family:inherit; font-size:14px; font-weight:700; color:#fff; background:{{ accBg }}; padding:11px 20px; border-radius:12px; transition:background .18s ease;" style-hover="background:{{ accDeep }};">Complete review →</button>
+        </div>
+        </sc-if>
+        <sc-if value="{{ notAllReviewed }}" hint-placeholder-val="{{ true }}">
+        <div style="margin-top:18px; font-size:13.5px; font-weight:600; color:#8A8F99;">{{ reviewProgressLabel }} — check off each step to close your review.</div>
+        </sc-if>
+      </div>
+      </sc-if>
+
+    </main>
+  </div>
+
+  
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Blue&quot;,&quot;options&quot;:[&quot;Blue&quot;,&quot;Navy&quot;,&quot;Green&quot;],&quot;tsType&quot;:&quot;string&quot;},&quot;paper&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Dotted&quot;,&quot;options&quot;:[&quot;Plain&quot;,&quot;Lined&quot;,&quot;Dotted&quot;],&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  capRef = React.createRef();
+  nextRef = React.createRef();
+  waitWhatRef = React.createRef();
+  waitWhoRef = React.createRef();
+  chatScrollRef = React.createRef();
+  heroCapRef = React.createRef();
+  sendBtnRef = React.createRef();
+  chatSendBtnRef = React.createRef();
+
+  popSendBtn(ref) {
+    const el = ref && ref.current;
+    if (!el) return;
+    el.classList.remove('send-pop');
+    void el.offsetWidth; // reflow to restart
+    el.classList.add('send-pop');
+    el.addEventListener('animationend', () => el.classList.remove('send-pop'), { once: true });
+  }
+
+  state = this.load();
+
+  load() {
+    let saved = null;
+    try { saved = JSON.parse(localStorage.getItem('gtd_ceo_v2')); } catch (e) {}
+    if (saved && Array.isArray(saved.items)) {
+      return {
+        page: saved.page || 'capture',
+        items: saved.items.map(i => i.bucket === 'inbox' ? Object.assign({}, i, { bucket: 'next' }) : i),
+        review: saved.review || this.freshReview(),
+        lastReviewedAt: saved.lastReviewedAt || null,
+        ack: null,
+        chat: this.freshChat(),
+        started: false,
+        isTyping: false,
+      };
+    }
+    return { page: 'capture', items: this.sample(), review: this.freshReview(), lastReviewedAt: null, ack: null, chat: this.freshChat(), started: false, isTyping: false };
+  }
+
+  freshChat() {
+    return [];
+  }
+
+  componentDidMount() {
+    if (!this.state.started) { const el = this.heroCapRef.current; if (el) el.focus(); }
+  }
+
+  freshReview() { return { clear: false, current: false, waiting: false, creative: false }; }
+  uid() { return 'i' + Math.random().toString(36).slice(2, 9); }
+  ago(days) { return Date.now() - days * 86400000; }
+
+  sample() {
+    const mk = (text, bucket, age, extra) => Object.assign({ id: this.uid(), text, bucket, createdAt: this.ago(age) }, extra || {});
+    return [
+      mk("Reply to the Vodafone partnership email — they want a call next week", 'next', 0),
+      mk("Outline the Q3 board deck", 'next', 1),
+      mk("Explore a weekly async product demo, recorded for the whole company", 'someday', 1),
+      mk("Renew the cyber-insurance policy before it lapses", 'next', 2),
+      mk("Decide on the Riyadh office — full lease vs. co-working for now", 'someday', 3),
+      mk("Call the lead investor to confirm Thursday's meeting", 'next', 0),
+      mk("Review & approve the new pricing-page copy", 'next', 1),
+      mk("Sign the updated DPA for the enterprise deal", 'next', 1),
+      mk("Draft the all-hands agenda", 'next', 2),
+      mk("Legal redlines on the enterprise MSA", 'waiting', 2, { who: 'Amira' }),
+      mk("Updated financial model for the raise", 'waiting', 4, { who: 'Yusuf' }),
+      mk("Onboarding redesign mocks", 'waiting', 1, { who: 'Product' }),
+      mk("Reference-check callback on the VP Eng candidate", 'waiting', 6, { who: 'Maya' }),
+      mk("Approve the brand-refresh direction", 'done', 0, { completedAt: Date.now() - 4 * 3600000 }),
+      mk("Send the May investor update", 'done', 2, { completedAt: this.ago(2) }),
+    ];
+  }
+
+  save() {
+    const { items, review, lastReviewedAt, page } = this.state;
+    try { localStorage.setItem('gtd_ceo_v2', JSON.stringify({ items, review, lastReviewedAt, page })); } catch (e) {}
+  }
+
+  setItems(fn) { this.setState(s => ({ items: fn(s.items) }), () => this.save()); }
+  go(page) { this.setState({ page }, () => this.save()); }
+  move(id, bucket) { this.setItems(items => items.map(i => i.id === id ? Object.assign({}, i, { bucket }) : i)); }
+  done(id) { this.setItems(items => items.map(i => i.id === id ? Object.assign({}, i, { bucket: 'done', completedAt: Date.now() }) : i)); }
+  del(id) { this.setItems(items => items.filter(i => i.id !== id)); }
+
+  // The AI layer: split a raw brain-dump into discrete items and route each
+  // one into the GTD system in the background — no manual sorting required.
+  classify(text) {
+    const low = text.toLowerCase();
+    if (/\b(maybe|some\s?day|one day|eventually|idea|think about|thinking about|consider|explore|could|might|wish|wonder if|what if)\b/.test(low)) return 'someday';
+    if (/\b(waiting|wait on|wait for|waiting for|hear back|heard back|expecting|owe|owes|pending|chase up|chasing|blocked on|once .* sends|until .* sends)\b/.test(low)) return 'waiting';
+    return 'next';
+  }
+
+  clean(text) {
+    let t = text.trim().replace(/[\s,.;]+$/, '');
+    t = t.replace(/^(and|then|also|plus)\s+/i, '');
+    t = t.replace(/^(i\s+(need to|have to|should|want to|must|gotta|got to|ought to)|need to|remember to|don'?t forget to|make sure to|gotta|todo:?|task:?|note:?|idea:?)\s+/i, '');
+    if (!t) return t;
+    return t.charAt(0).toUpperCase() + t.slice(1);
+  }
+
+  parseDump(raw) {
+    const segments = raw
+      .split(/\n+|\s+and\s+then\s+|,\s+and\s+|\s+then\s+|,|;|\u2022|\s+and\s+(?=(?:maybe|think|finish|call|email|follow|review|send|draft|write|check|book|schedule|talk|ask|set up|plan|reach)\b)/i)
+      .map(s => this.clean(s))
+      .filter(s => s.length > 2);
+    if (segments.length === 0) { const c = this.clean(raw); return c ? [c] : []; }
+    return segments;
+  }
+
+  extractWho(text) {
+    const m = text.match(/from\s+([A-Z][\w'-]*(?:\s+[A-Z][\w'-]*)?)/);
+    if (m) return m[1];
+    const m2 = text.match(/\b([A-Z][\w'-]+)\s+(?:to|owes|hasn'?t|needs to|will|should)\b/);
+    return m2 ? m2[1] : '';
+  }
+
+  scrollChat() {
+    if (this._scrollTimer) clearTimeout(this._scrollTimer);
+    this._scrollTimer = setTimeout(() => {
+      const el = this.chatScrollRef && this.chatScrollRef.current;
+      if (el) el.scrollTop = el.scrollHeight;
+    }, 60);
+  }
+
+  addCapture() {
+    const el = this.capRef.current; if (!el) return;
+    const t = el.value; el.value = ''; el.style.height = 'auto';
+    this.popSendBtn(this.chatSendBtnRef);
+    this.send(t);
+  }
+  heroSend() {
+    const el = this.heroCapRef.current; if (!el) return;
+    const t = el.value; el.value = ''; el.style.height = 'auto';
+    this.popSendBtn(this.sendBtnRef);
+    this.send(t);
+  }
+  async send(text) {
+    text = (text || '').trim();
+    if (!text || this.state.isTyping) return;
+
+    const userMsg = { role: 'user', content: text, captured: [] };
+    const newChat = [...this.state.chat, userMsg];
+    this.setState({ chat: newChat, isTyping: true, started: true }, () => {
+      this.scrollChat();
+      const el = this.capRef.current; if (el) el.focus();
+    });
+
+    const SYSTEM = "You are the assistant inside a busy CEO's personal notebook \u2014 a calm, sharp chief-of-staff who helps them think out loud. Hold a natural, brief conversation: understand what they're working on and what they want to get done today, ask one focused follow-up at a time, and reflect their priorities back clearly. As real commitments surface, quietly file them into their GTD system.\n\nYou MUST reply with ONLY a single valid JSON object \u2014 no markdown, no code fences, no text before or after. Exact shape:\n{\"reply\":\"your conversational message, 1-3 short sentences, warm and direct, plain text only\",\"capture\":[{\"text\":\"concise task starting with a verb, under 80 chars\",\"type\":\"next\",\"who\":\"\"}]}\n\ncapture rules:\n- type \"next\" = a concrete action the CEO themselves must take\n- type \"waiting\" = something they're expecting from another person; put that person's name in \"who\"\n- only capture clear, real commitments \u2014 never vague musings or things you're merely asking about\n- use an empty array [] when nothing concrete has been decided yet\n- never restate the captured items verbatim in your reply; acknowledge naturally if at all\nAfter a few exchanges, give a short plain-text summary of what you've logged and what their day looks like.";
+
+    const transcript = newChat.map(m => (m.role === 'user' ? 'CEO' : 'Assistant') + ': ' + m.content).join('\n');
+    const prompt = SYSTEM + "\n\n=== Conversation so far ===\n" + transcript + "\n\nRespond to the CEO's latest message now. Output ONLY the JSON object.";
+
+    try {
+      const raw = await window.claude.complete(prompt);
+      let reply = (raw || '').trim().replace(/^```(?:json)?\s*|\s*```$/g, '').trim();
+      let captured = [];
+      try {
+        const m = reply.match(/\{[\s\S]*\}/);
+        const j = JSON.parse(m ? m[0] : reply);
+        if (j && typeof j.reply === 'string') reply = j.reply.trim();
+        if (j && Array.isArray(j.capture)) captured = j.capture.filter(c => c && c.text && c.text.trim());
+      } catch (e) { /* fall back to raw text */ }
+
+      if (captured.length) {
+        const now = Date.now();
+        const newItems = captured.map((c, idx) => {
+          const bucket = c.type === 'waiting' ? 'waiting' : 'next';
+          const item = { id: this.uid(), text: c.text.trim(), bucket, createdAt: now - idx };
+          if (bucket === 'waiting' && c.who && c.who.trim()) item.who = c.who.trim();
+          return item;
+        });
+        this.setItems(items => [...newItems, ...items]);
+      }
+
+      const aiMsg = { role: 'assistant', content: reply || "Got it.", captured };
+      this.setState(s => ({ chat: [...s.chat, aiMsg], isTyping: false }), () => this.scrollChat());
+    } catch (e) {
+      const errMsg = { role: 'assistant', content: "I couldn't reach my brain just now \u2014 give it another second and try again.", captured: [] };
+      this.setState(s => ({ chat: [...s.chat, errMsg], isTyping: false }), () => this.scrollChat());
+    }
+  }
+  addNext() {
+    const el = this.nextRef.current; if (!el) return;
+    const t = el.value.trim(); if (!t) return;
+    const item = { id: this.uid(), text: t, bucket: 'next', createdAt: Date.now() };
+    this.setItems(items => [...items, item]);
+    el.value = ''; el.focus();
+  }
+  addWaiting() {
+    const a = this.waitWhatRef.current, b = this.waitWhoRef.current; if (!a) return;
+    const t = a.value.trim(); if (!t) return;
+    const who = (b && b.value.trim()) || '';
+    const item = { id: this.uid(), text: t, bucket: 'waiting', createdAt: Date.now(), who };
+    this.setItems(items => [...items, item]);
+    a.value = ''; if (b) b.value = ''; a.focus();
+  }
+  toggleReview(k) { this.setState(s => ({ review: Object.assign({}, s.review, { [k]: !s.review[k] }) }), () => this.save()); }
+  completeReview() { this.setState({ review: this.freshReview(), lastReviewedAt: Date.now() }, () => this.save()); }
+
+  rel(ts) {
+    const d = Math.floor((Date.now() - ts) / 86400000);
+    if (d <= 0) return 'today';
+    if (d === 1) return 'yesterday';
+    if (d < 7) return d + 'd ago';
+    const w = Math.floor(d / 7);
+    return w === 1 ? 'a week ago' : w + 'w ago';
+  }
+
+  renderVals() {
+    const s = this.state;
+    const ACC = {
+      Blue: ['#2B7AF3', '#1D4ED8', 'rgba(43,122,243,0.12)'],
+      Navy: ['#F3F3F5', '#000000', 'rgba(17,24,39,0.08)'],
+      Green: ['#5B9E12', '#4D8610', 'rgba(91,158,18,0.14)'],
+    };
+    const acc = ACC[this.props.accent] || ACC.Blue;
+    const started = !!s.started;
+    const ACCBORDER = { Blue: 'rgba(43,122,243,0.30)', Navy: 'rgba(243,243,245,0.30)', Green: 'rgba(91,158,18,0.32)' };
+    const accBorder = ACCBORDER[this.props.accent] || ACCBORDER.Blue;
+    const PAP = {
+      Plain: ['none', 'auto'],
+      Lined: ['repeating-linear-gradient(to bottom, transparent 0, transparent 33px, rgba(255,255,255,0.06) 33px, rgba(255,255,255,0.06) 34px)', 'auto'],
+      Dotted: ['radial-gradient(rgba(255,255,255,0.10) 1.5px, transparent 1.5px)', '24px 24px'],
+    };
+    const pap = PAP[this.props.paper] || PAP.Plain;
+
+    const items = s.items;
+    const next = items.filter(i => i.bucket === 'next');
+    const waiting = items.filter(i => i.bucket === 'waiting');
+    const someday = items.filter(i => i.bucket === 'someday');
+    const doneWeek = items.filter(i => i.bucket === 'done' && i.completedAt && (Date.now() - i.completedAt) < 7 * 86400000);
+    const doneToday = items.filter(i => i.bucket === 'done' && i.completedAt && (Date.now() - i.completedAt) < 86400000);
+
+    const navBase = {
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px',
+      width: '100%', padding: '11px 14px', border: 'none', borderRadius: '12px', cursor: 'pointer',
+      fontFamily: 'inherit', fontSize: '14.5px', textAlign: 'left',
+      transition: 'background .18s ease, color .18s ease',
+    };
+    const navActiveStyle = Object.assign({}, navBase, { background: acc[2], color: acc[0], fontWeight: 700 });
+    const navIdleStyle = Object.assign({}, navBase, { background: 'transparent', color: '#C2C7CF', fontWeight: 600 });
+
+    const reviewDefs = [
+      { key: 'clear', title: 'Get clear', desc: 'Empty your inbox to zero — clarify every captured note.' },
+      { key: 'current', title: 'Get current', desc: 'Walk every next action. Is it still the right next step?' },
+      { key: 'waiting', title: 'Chase what you\u2019re waiting on', desc: 'Scan the waiting-for list. Nudge anything that\u2019s gone quiet.' },
+      { key: 'creative', title: 'Get creative', desc: 'Look up from the list. What matters most this coming week?' },
+    ];
+    const reviewSteps = reviewDefs.map(r => {
+      const checked = !!s.review[r.key];
+      return {
+        key: r.key, title: r.title, desc: r.desc, checked,
+        boxBorder: checked ? acc[0] : '#3A3A42',
+        boxBg: checked ? acc[0] : '#0E0E12',
+        toggle: () => this.toggleReview(r.key),
+      };
+    });
+    const checkedCount = reviewSteps.filter(r => r.checked).length;
+    const allReviewed = checkedCount === reviewSteps.length;
+
+    const now = new Date();
+    const h = now.getHours();
+    const greeting = h < 12 ? 'Good morning' : (h < 18 ? 'Good afternoon' : 'Good evening');
+
+    return {
+      greeting,
+      todayLabel: now.toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' }),
+
+      navActiveStyle, navIdleStyle,
+      accBg: acc[0], accDeep: acc[1], accSoft: acc[2], accColor: acc[0],
+      paperBg: pap[0], paperSize: pap[1],
+
+      goCapture: () => this.go('capture'),
+      goNext: () => this.go('next'),
+      goWaiting: () => this.go('waiting'),
+      goReview: () => this.go('review'),
+
+      isCapture: s.page === 'capture',
+      isNext: s.page === 'next',
+      isWaiting: s.page === 'waiting',
+      isReview: s.page === 'review',
+      notCapture: s.page !== 'capture',
+      notNext: s.page !== 'next',
+      notWaiting: s.page !== 'waiting',
+      notReview: s.page !== 'review',
+
+      inboxCount: 0,
+      nextCount: next.length,
+      waitCount: waiting.length,
+      somedayCount: someday.length,
+      doneWeekCount: doneWeek.length,
+
+      capRef: this.capRef,
+      heroCapRef: this.heroCapRef,
+      sendBtnRef: this.sendBtnRef,
+      chatSendBtnRef: this.chatSendBtnRef,
+      onCapKey: (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); this.addCapture(); } },
+      onHeroKey: (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); this.heroSend(); } },
+      onCapInput: (e) => { const el = e.target; el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 200) + 'px'; },
+      addCapture: () => this.addCapture(),
+      heroSend: () => this.heroSend(),
+
+      heroOpacity: started ? '0' : '1',
+      heroTransform: started ? 'translateY(38px)' : 'none',
+      heroPE: started ? 'none' : 'auto',
+      chatOpacity: started ? '1' : '0',
+      chatPE: started ? 'auto' : 'none',
+
+      chatScrollRef: this.chatScrollRef,
+      isTyping: !!s.isTyping,
+      chatMessages: s.chat.map(m => ({
+        isAI: m.role === 'assistant',
+        isUser: m.role === 'user',
+        content: m.content,
+        hasCaptured: !!(m.captured && m.captured.length),
+        chips: (m.captured || []).map(c => {
+          const waiting = c.type === 'waiting';
+          const label = (c.text || '').length > 46 ? c.text.slice(0, 46).trim() + '\u2026' : c.text;
+          return waiting
+            ? { label, icon: '\u23f3', color: '#F0B43C', bg: 'rgba(251,191,36,0.12)', border: 'rgba(251,191,36,0.28)' }
+            : { label, icon: '\u2713', color: acc[0], bg: acc[2], border: accBorder };
+        }),
+      })),
+
+      nextRef: this.nextRef,
+      onNextKey: (e) => { if (e.key === 'Enter') { e.preventDefault(); this.addNext(); } },
+      addNext: () => this.addNext(),
+      nextHasItems: next.length > 0,
+      nextEmpty: next.length === 0,
+      nextRows: next.map(i => ({
+        id: i.id, text: i.text, when: this.rel(i.createdAt),
+        toggle: () => this.done(i.id),
+        remove: () => this.del(i.id),
+      })),
+      hasDoneToday: doneToday.length > 0,
+      doneTodayLabel: doneToday.length === 1 ? '1 done today' : doneToday.length + ' done today',
+
+      waitWhatRef: this.waitWhatRef,
+      waitWhoRef: this.waitWhoRef,
+      onWaitKey: (e) => { if (e.key === 'Enter') { e.preventDefault(); this.addWaiting(); } },
+      addWaiting: () => this.addWaiting(),
+      waitHasItems: waiting.length > 0,
+      waitEmpty: waiting.length === 0,
+      waitRows: waiting.map(i => ({
+        id: i.id, text: i.text,
+        who: i.who || '', hasWho: !!(i.who && i.who.trim()),
+        since: this.rel(i.createdAt),
+        got: () => this.done(i.id),
+        remove: () => this.del(i.id),
+      })),
+
+      reviewSteps,
+      allReviewed,
+      notAllReviewed: !allReviewed,
+      reviewProgressLabel: checkedCount + ' of ' + reviewSteps.length + ' complete',
+      completeReview: () => this.completeReview(),
+      lastReviewedLabel: s.lastReviewedAt ? this.rel(s.lastReviewedAt) : 'not yet — start one',
+    };
+  }
+}
+</script>
+</body>
+</html>

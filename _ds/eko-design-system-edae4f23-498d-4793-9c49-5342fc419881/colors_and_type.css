@@ -1,0 +1,229 @@
+/* =====================================================================
+   eko — Colors & Type Tokens
+   ---------------------------------------------------------------------
+   The single source of truth for visual foundations.
+   - Loads Montserrat from Google Fonts (primary brand font per guidelines)
+   - Defines color tokens (core + extended palette)
+   - Defines semantic type tokens (.eko-h1, .eko-p, etc.)
+   ===================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+:root {
+  /* ---------- CORE COLOR PALETTE ---------- */
+  /* From brand guidelines v4: Eko Playful Tech theme.
+     Two blue tokens are defined: --eko-blue is the brand primary used for
+     interactive elements; --eko-blue-bright is the lighter, more saturated
+     blue used for the mascot, illustrations and decorative blobs. */
+  --eko-blue:           #2B7AF3;  /* primary blue — buttons, links, accents */
+  --eko-blue-bright:    #4D91F2;  /* illustration / mascot blue */
+  --eko-blue-deep:      #1D4ED8;  /* hover / pressed state */
+  --eko-blue-soft:      #EFF6FF;  /* tint background for chips, soft fills */
+
+  --deep-navy:          #111827;  /* anchor color for typography */
+  --deep-black:         #12151D;  /* used for mascot facial features + strong contrast */
+
+  --pure-white:         #FFFFFF;
+  --soft-cream:         #F3F1E8;  /* secondary background (per extended palette) */
+
+  /* ---------- EXTENDED PLAYFUL PALETTE ---------- */
+  --vibrant-red:        #E11D48;  /* urgency, passion, "human" energy */
+  --energy-yellow:      #FBBF24;  /* optimism, highlights */
+  --olive-green:        #84CC16;  /* growth, "go" signals */
+
+  /* ---------- NEUTRALS ---------- */
+  --slate-900:          #0F172A;
+  --slate-700:          #334155;
+  --slate-600:          #475569;
+  --slate-500:          #64748B;
+  --slate-300:          #CBD5E1;
+  --slate-200:          #E2E8F0;
+  --slate-100:          #F1F5F9;
+  --slate-50:           #F8FAFC;
+  --bg-page:            #F5F5F5;  /* page background used in website */
+
+  /* ---------- SEMANTIC FG / BG ---------- */
+  --fg-1:               var(--deep-navy);   /* primary text */
+  --fg-2:               var(--slate-600);   /* secondary text */
+  --fg-3:               var(--slate-500);   /* tertiary / metadata */
+  --fg-inverse:         var(--pure-white);
+  --fg-brand:           var(--eko-blue);
+
+  --bg-1:               var(--pure-white);  /* primary surface */
+  --bg-2:               var(--soft-cream);  /* warm secondary surface */
+  --bg-3:               var(--slate-50);    /* cool secondary surface */
+  --bg-page-default:    var(--bg-page);
+
+  --border-subtle:      rgba(0, 0, 0, 0.05);
+  --border-default:     var(--slate-200);
+  --border-strong:      var(--slate-300);
+
+  /* ---------- ELEVATION ---------- */
+  --shadow-xs:          0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-sm:          0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-md:          0 10px 20px -4px rgba(0, 102, 255, 0.12);
+  --shadow-lg:          0 25px 50px -12px rgba(0, 0, 0, 0.18);
+  --shadow-xl:          0 40px 100px rgba(0, 0, 0, 0.08);
+
+  /* ---------- RADII ---------- */
+  --radius-xs:          6px;
+  --radius-sm:          8px;
+  --radius-md:          12px;
+  --radius-lg:          20px;
+  --radius-xl:          24px;
+  --radius-2xl:         32px;
+  --radius-pill:        9999px;
+
+  /* ---------- SPACING SCALE (4pt) ---------- */
+  --space-1:            4px;
+  --space-2:            8px;
+  --space-3:            12px;
+  --space-4:            16px;
+  --space-5:            20px;
+  --space-6:            24px;
+  --space-8:            32px;
+  --space-10:           40px;
+  --space-12:           48px;
+  --space-16:           64px;
+  --space-20:           80px;
+  --space-24:           96px;
+  --space-32:           128px;
+
+  /* ---------- MOTION ---------- */
+  --ease-out-soft:      cubic-bezier(0.16, 1, 0.3, 1);  /* signature ease used in App.jsx */
+  --ease-standard:      cubic-bezier(0.4, 0, 0.2, 1);
+  --duration-fast:      150ms;
+  --duration-base:      300ms;
+  --duration-slow:      600ms;
+
+  /* ---------- TYPE TOKENS ---------- */
+  --font-display:       'Montserrat', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-body:          'Montserrat', 'Segoe UI', system-ui, -apple-system, sans-serif;
+  --font-mono:          ui-monospace, 'SF Mono', 'Cascadia Code', Menlo, monospace;
+
+  --fw-regular:         400;
+  --fw-medium:          500;
+  --fw-semibold:        600;
+  --fw-bold:            700;
+  --fw-extrabold:       800;
+
+  --tracking-tight:     -0.04em;
+  --tracking-snug:      -0.02em;
+  --tracking-wide:      0.15em;
+
+  --leading-tight:      1.1;
+  --leading-snug:       1.2;
+  --leading-base:       1.5;
+  --leading-loose:      1.7;
+
+  /* fluid type ramp */
+  --fs-display:         clamp(48px, 6vw, 84px);
+  --fs-h1:              clamp(36px, 4.5vw, 64px);
+  --fs-h2:              clamp(28px, 3vw, 42px);
+  --fs-h3:              clamp(20px, 2vw, 28px);
+  --fs-h4:              18px;
+  --fs-body-lg:         18px;
+  --fs-body:            16px;
+  --fs-body-sm:         14px;
+  --fs-caption:         12px;
+}
+
+/* =====================================================================
+   Semantic type classes — apply directly or use as @extends.
+   ===================================================================== */
+.eko-display {
+  font-family: var(--font-display);
+  font-weight: var(--fw-extrabold);
+  font-size: var(--fs-display);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-tight);
+  color: var(--fg-1);
+}
+
+.eko-h1 {
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-h1);
+  line-height: var(--leading-tight);
+  letter-spacing: var(--tracking-snug);
+  color: var(--fg-1);
+}
+
+.eko-h2 {
+  font-family: var(--font-display);
+  font-weight: var(--fw-extrabold);
+  font-size: var(--fs-h2);
+  line-height: var(--leading-snug);
+  letter-spacing: var(--tracking-snug);
+  color: var(--fg-1);
+}
+
+.eko-h3 {
+  font-family: var(--font-display);
+  font-weight: var(--fw-bold);
+  font-size: var(--fs-h3);
+  line-height: var(--leading-snug);
+  color: var(--fg-1);
+}
+
+.eko-h4 {
+  font-family: var(--font-display);
+  font-weight: var(--fw-semibold);
+  font-size: var(--fs-h4);
+  line-height: 1.4;
+  color: var(--fg-1);
+}
+
+.eko-eyebrow {
+  font-family: var(--font-body);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-bold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  color: var(--fg-brand);
+}
+
+.eko-body-lg {
+  font-family: var(--font-body);
+  font-size: var(--fs-body-lg);
+  font-weight: var(--fw-medium);
+  line-height: var(--leading-base);
+  color: var(--fg-2);
+}
+
+.eko-body {
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-regular);
+  line-height: var(--leading-base);
+  color: var(--fg-2);
+}
+
+.eko-body-sm {
+  font-family: var(--font-body);
+  font-size: var(--fs-body-sm);
+  font-weight: var(--fw-medium);
+  line-height: var(--leading-base);
+  color: var(--fg-2);
+}
+
+.eko-caption {
+  font-family: var(--font-body);
+  font-size: var(--fs-caption);
+  font-weight: var(--fw-semibold);
+  line-height: 1.4;
+  color: var(--fg-3);
+}
+
+.eko-mono {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0;
+}
+
+/* brand wordmark — always lowercase, brand blue */
+.eko-wordmark {
+  color: var(--eko-blue);
+  text-transform: lowercase;
+  font-weight: var(--fw-extrabold);
+}
