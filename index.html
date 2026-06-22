@@ -7,6 +7,15 @@
 <meta name="description" content="Your AI co-founder. Think out loud, track commitments, and build in the open.">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="./support.js"></script>
+<script type="module">
+  window.__ENV = {
+    VITE_OPENAI_API_KEY: import.meta.env.VITE_OPENAI_API_KEY || '',
+    VITE_OPENAI_API_BASE: import.meta.env.VITE_OPENAI_API_BASE || '',
+    VITE_OPENAI_API_MODEL: import.meta.env.VITE_OPENAI_API_MODEL || '',
+    VITE_SUPABASE_URL: import.meta.env.VITE_SUPABASE_URL || '',
+    VITE_SUPABASE_ANON_KEY: import.meta.env.VITE_SUPABASE_ANON_KEY || '',
+  };
+</script>
 <template id="__bundler_thumbnail" data-bg-color="#F1EEE4">
   <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
     <rect x="360" y="170" width="480" height="500" rx="28" fill="#ffffff" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
@@ -503,13 +512,23 @@
       <div style="width:100%; max-width:760px; margin:0 auto; padding:44px 52px 48px;">
         <div style="font-size:11px; font-weight:700; letter-spacing:0.15em; text-transform:uppercase; color:{{ accColor }}; margin-bottom:10px;">Settings</div>
         <h2 style="margin:0 0 6px; font-size:30px; font-weight:800; letter-spacing:-0.02em; color:#F3F3F5; line-height:1.15;">AI Configuration</h2>
-        <p style="margin:0 0 26px; font-size:15px; font-weight:500; line-height:1.55; color:#AEB3BC;">Configure the AI model powering your assistant. Credentials are managed via environment variables.</p>
+        <p style="margin:0 0 26px; font-size:15px; font-weight:500; line-height:1.55; color:#AEB3BC;">Configure the AI model powering your assistant. You can set them via environment variables or override them here locally.</p>
 
         <div style="display:flex; flex-direction:column; gap:20px; background:#141418; border:1px solid rgba(255,255,255,0.08); border-radius:18px; padding:24px 28px;">
           <div>
             <label style="display:block; font-size:12.5px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:#8A8F99; margin-bottom:8px;">Model Name</label>
             <input ref="{{ apiModelRef }}" type="text" placeholder="gpt-4o" defaultValue="{{ apiModelVal }}" style="width:100%; height:44px; border:1px solid rgba(255,255,255,0.10); background:#1C1C22; border-radius:10px; padding:0 14px; font-family:inherit; font-size:14.5px; font-weight:500; color:#F3F3F5; outline:none;" style-focus="border-color:{{ accColor }};">
-            <span style="display:block; font-size:12px; font-weight:500; color:#5E636B; margin-top:5px;">e.g., gpt-4o, kimi-k2, moonshot-v1-8k. API keys are set via environment variables.</span>
+            <span style="display:block; font-size:12px; font-weight:500; color:#5E636B; margin-top:5px;">e.g., gpt-4o, claude-3-5-sonnet, deepseek-chat</span>
+          </div>
+          <div>
+            <label style="display:block; font-size:12.5px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:#8A8F99; margin-bottom:8px;">API Key</label>
+            <input ref="{{ apiKeyRef }}" type="password" placeholder="sk-..." defaultValue="{{ apiKeyVal }}" style="width:100%; height:44px; border:1px solid rgba(255,255,255,0.10); background:#1C1C22; border-radius:10px; padding:0 14px; font-family:inherit; font-size:14.5px; font-weight:500; color:#F3F3F5; outline:none;" style-focus="border-color:{{ accColor }};">
+            <span style="display:block; font-size:12px; font-weight:500; color:#5E636B; margin-top:5px;">Your provider's API Key. Stored safely in your local browser storage.</span>
+          </div>
+          <div>
+            <label style="display:block; font-size:12.5px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; color:#8A8F99; margin-bottom:8px;">API Base URL</label>
+            <input ref="{{ apiBaseRef }}" type="text" placeholder="https://api.openai.com/v1" defaultValue="{{ apiBaseVal }}" style="width:100%; height:44px; border:1px solid rgba(255,255,255,0.10); background:#1C1C22; border-radius:10px; padding:0 14px; font-family:inherit; font-size:14.5px; font-weight:500; color:#F3F3F5; outline:none;" style-focus="border-color:{{ accColor }};">
+            <span style="display:block; font-size:12px; font-weight:500; color:#5E636B; margin-top:5px;">e.g., https://api.openai.com/v1, https://api.deepseek.com/v1, or http://localhost:11434/v1</span>
           </div>
           <div style="display:flex; justify-content:flex-end; margin-top:4px;">
             <button onClick="{{ saveSettings }}" style="border:none; cursor:pointer; font-family:inherit; font-size:14px; font-weight:700; color:#fff; background:{{ accBg }}; padding:11px 24px; border-radius:10px; transition:background .18s ease;" style-hover="background:{{ accDeep }};">Save</button>
@@ -588,6 +607,8 @@ class Component extends DCLogic {
   projectRef = React.createRef();
   somedayRef = React.createRef();
   apiModelRef = React.createRef();
+  apiKeyRef = React.createRef();
+  apiBaseRef = React.createRef();
   authEmailRef = React.createRef();
   authPasswordRef = React.createRef();
   profNameRef = React.createRef();
@@ -599,13 +620,10 @@ class Component extends DCLogic {
   _sb = null;
   _getSupabase() {
     if (this._sb) return this._sb;
-    const url = (typeof import_meta_env !== 'undefined' && import_meta_env.VITE_SUPABASE_URL)
-      || (typeof window.__SB_URL !== 'undefined' && window.__SB_URL)
-      || '';
-    const key = (typeof import_meta_env !== 'undefined' && import_meta_env.VITE_SUPABASE_ANON_KEY)
-      || (typeof window.__SB_KEY !== 'undefined' && window.__SB_KEY)
-      || '';
-    if (!url || !key) return null;
+    const env = window.__ENV || {};
+    const url = env.VITE_SUPABASE_URL || '';
+    const key = env.VITE_SUPABASE_ANON_KEY || '';
+    if (!url || !key || url.includes('your_supabase') || key.includes('your_supabase')) return null;
     this._sb = window.supabase.createClient(url, key);
     return this._sb;
   }
@@ -663,7 +681,12 @@ class Component extends DCLogic {
     // Load local AI model pref
     try {
       const localPref = JSON.parse(localStorage.getItem('ceo_ai_prefs') || '{}');
-      if (localPref.apiModel) this.setState({ apiModel: localPref.apiModel });
+      const env = window.__ENV || {};
+      this.setState({
+        apiModel: localPref.apiModel || env.VITE_OPENAI_API_MODEL || 'gpt-4o',
+        apiKey: localPref.apiKey || env.VITE_OPENAI_API_KEY || '',
+        apiBase: localPref.apiBase || env.VITE_OPENAI_API_BASE || 'https://api.openai.com/v1',
+      });
     } catch(e) {}
 
     const sb = this._getSupabase();
@@ -779,8 +802,11 @@ class Component extends DCLogic {
   go(page) {
     this.setState({ page }, () => {
       if (page === 'settings') {
+        const { apiModel, apiKey, apiBase } = this.state;
         setTimeout(() => {
-          if (this.apiModelRef.current) this.apiModelRef.current.value = this.state.apiModel;
+          if (this.apiModelRef.current) this.apiModelRef.current.value = apiModel || 'gpt-4o';
+          if (this.apiKeyRef.current) this.apiKeyRef.current.value = apiKey || '';
+          if (this.apiBaseRef.current) this.apiBaseRef.current.value = apiBase || 'https://api.openai.com/v1';
         }, 10);
       }
       if (page === 'profile') {
@@ -799,8 +825,22 @@ class Component extends DCLogic {
   // --- Settings ---
   saveSettings() {
     const model = this.apiModelRef.current ? this.apiModelRef.current.value.trim() : 'gpt-4o';
-    this.setState({ apiModel: model || 'gpt-4o' });
-    try { localStorage.setItem('ceo_ai_prefs', JSON.stringify({ apiModel: model })); } catch(e) {}
+    const key = this.apiKeyRef.current ? this.apiKeyRef.current.value.trim() : '';
+    const base = this.apiBaseRef.current ? this.apiBaseRef.current.value.trim() : 'https://api.openai.com/v1';
+    
+    this.setState({
+      apiModel: model || 'gpt-4o',
+      apiKey: key || '',
+      apiBase: base || 'https://api.openai.com/v1'
+    });
+    
+    try {
+      localStorage.setItem('ceo_ai_prefs', JSON.stringify({
+        apiModel: model,
+        apiKey: key,
+        apiBase: base
+      }));
+    } catch(e) {}
     this.go('capture');
   }
 
@@ -1404,7 +1444,11 @@ Rules: capture = real commitments only. updateProfile = only changed fields. upd
 
       // Settings
       apiModelRef: this.apiModelRef,
+      apiKeyRef: this.apiKeyRef,
+      apiBaseRef: this.apiBaseRef,
       apiModelVal: s.apiModel || 'gpt-4o',
+      apiKeyVal: s.apiKey || '',
+      apiBaseVal: s.apiBase || 'https://api.openai.com/v1',
       saveSettings: () => this.saveSettings(),
 
       // Profile editor
