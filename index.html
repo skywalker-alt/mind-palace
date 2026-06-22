@@ -76,21 +76,16 @@
       <p style="margin:0; font-size:15px; font-weight:500; color:#8A8F99;">Your AI co-founder, always in context.</p>
     </div>
     <div style="background:#141418; border:1px solid rgba(255,255,255,0.08); border-radius:22px; padding:28px;">
-      <div style="font-size:15px; font-weight:700; color:#F3F3F5; margin-bottom:20px; text-align:center;">{{ authModeLabel }}</div>
+      <div style="font-size:15px; font-weight:700; color:#F3F3F5; margin-bottom:20px; text-align:center;">Enter Password to Access</div>
       <div style="display:flex; flex-direction:column; gap:14px;">
         <div>
-          <label style="display:block; font-size:11.5px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:#7E838D; margin-bottom:7px;">Email</label>
-          <input ref="{{ authEmailRef }}" type="email" placeholder="you@example.com" class="auth-input" style="width:100%; height:46px; border:1.5px solid rgba(255,255,255,0.10); border-radius:12px; background:#1C1C22; padding:0 16px; font-family:inherit; font-size:15px; font-weight:500; color:#F3F3F5; outline:none; transition:border-color .18s, box-shadow .18s;">
-        </div>
-        <div>
           <label style="display:block; font-size:11.5px; font-weight:700; letter-spacing:0.05em; text-transform:uppercase; color:#7E838D; margin-bottom:7px;">Password</label>
-          <input ref="{{ authPasswordRef }}" type="password" placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" class="auth-input" style="width:100%; height:46px; border:1.5px solid rgba(255,255,255,0.10); border-radius:12px; background:#1C1C22; padding:0 16px; font-family:inherit; font-size:15px; font-weight:500; color:#F3F3F5; outline:none; transition:border-color .18s, box-shadow .18s;">
+          <input ref="{{ authPasswordRef }}" type="password" onKeyDown="{{ onAuthKey }}" placeholder="••••••••" class="auth-input" style="width:100%; height:46px; border:1.5px solid rgba(255,255,255,0.10); border-radius:12px; background:#1C1C22; padding:0 16px; font-family:inherit; font-size:15px; font-weight:500; color:#F3F3F5; outline:none; transition:border-color .18s, box-shadow .18s;">
         </div>
         <sc-if value="{{ authError }}" hint-placeholder-val="{{ false }}">
         <div style="font-size:13px; font-weight:600; color:#F87171; padding:10px 14px; background:rgba(239,68,68,0.08); border:1px solid rgba(239,68,68,0.20); border-radius:10px;">{{ authError }}</div>
         </sc-if>
-        <button onClick="{{ submitAuth }}" style="width:100%; height:48px; border:none; border-radius:12px; cursor:pointer; font-family:inherit; font-size:15.5px; font-weight:800; color:#fff; background:#2B7AF3; letter-spacing:-0.01em; transition:background .18s ease; margin-top:4px;" style-hover="background:#1D4ED8;">{{ authBtnLabel }}</button>
-        <button onClick="{{ toggleAuthMode }}" style="width:100%; height:36px; border:none; background:transparent; cursor:pointer; font-family:inherit; font-size:13.5px; font-weight:600; color:#7E838D; transition:color .15s;" style-hover="color:#C2C7CF;">{{ authToggleLabel }}</button>
+        <button onClick="{{ submitAuth }}" style="width:100%; height:48px; border:none; border-radius:12px; cursor:pointer; font-family:inherit; font-size:15.5px; font-weight:800; color:#fff; background:#2B7AF3; letter-spacing:-0.01em; transition:background .18s ease; margin-top:4px;" style-hover="background:#1D4ED8;">Unlock</button>
       </div>
     </div>
   </div>
@@ -728,25 +723,42 @@ class Component extends DCLogic {
 
   // --- Auth ---
   async submitAuth() {
-    const sb = this._getSupabase();
-    const email = this.authEmailRef.current ? this.authEmailRef.current.value.trim() : '';
     const password = this.authPasswordRef.current ? this.authPasswordRef.current.value : '';
-    if (!email || !password) { this.setState({ authError: 'Please enter your email and password.' }); return; }
+    if (password !== 'convrt') {
+      this.setState({ authError: 'Incorrect password' });
+      return;
+    }
     this.setState({ authLoading: true, authError: '' });
+    
+    const sb = this._getSupabase();
+    if (!sb) {
+      // Demo mode without Supabase
+      this.setState({ user: { id: 'demo', email: 'admin@convrt.ai' }, authLoading: false, items: this.sample() });
+      return;
+    }
+    
+    // With Supabase: use a predefined admin account under the hood
+    const email = 'admin@convrt.ai';
+    const sbPassword = 'convrt_secure_password_123';
+    
     try {
-      let result;
-      if (!sb) {
-        // Demo mode without Supabase
-        this.setState({ user: { id: 'demo', email }, authLoading: false, items: this.sample() });
-        return;
-      }
-      if (this.state.authMode === 'login') {
-        result = await sb.auth.signInWithPassword({ email, password });
-      } else {
-        result = await sb.auth.signUp({ email, password });
-      }
-      if (result.error) {
-        this.setState({ authError: result.error.message, authLoading: false });
+      let { data, error } = await sb.auth.signInWithPassword({ email, password: sbPassword });
+      if (error) {
+        // If account doesn't exist, try to sign up
+        if (error.message.includes('Invalid login credentials') || error.message.includes('Email not confirmed')) {
+          const { data: signUpData, error: signUpError } = await sb.auth.signUp({ email, password: sbPassword });
+          if (signUpError) {
+            this.setState({ authError: signUpError.message, authLoading: false });
+          } else {
+            if (signUpData && signUpData.user) {
+              this.setState({ user: signUpData.user, authLoading: false });
+            } else {
+              this.setState({ authError: 'Signup succeeded! Please verify email if confirmation is required in your Supabase dashboard.', authLoading: false });
+            }
+          }
+        } else {
+          this.setState({ authError: error.message, authLoading: false });
+        }
       } else {
         this.setState({ authLoading: false });
       }
@@ -1261,11 +1273,12 @@ Rules: capture = real commitments only. updateProfile = only changed fields. upd
       // Auth
       showAuth: !s.user,
       authModeLabel: s.authMode === 'login' ? 'Sign in to your account' : 'Create your account',
-      authBtnLabel: s.authMode === 'login' ? (s.authLoading ? 'Signing inâ€¦' : 'Sign In') : (s.authLoading ? 'Creating accountâ€¦' : 'Create Account'),
+      authBtnLabel: s.authMode === 'login' ? (s.authLoading ? 'Signing in…' : 'Sign In') : (s.authLoading ? 'Creating account…' : 'Create Account'),
       authToggleLabel: s.authMode === 'login' ? "Don't have an account? Sign up" : 'Already have an account? Sign in',
       authError: s.authError || '',
       authEmailRef: this.authEmailRef,
       authPasswordRef: this.authPasswordRef,
+      onAuthKey: (e) => { if (e.key === 'Enter') { e.preventDefault(); this.submitAuth(); } },
       submitAuth: () => this.submitAuth(),
       toggleAuthMode: () => this.toggleAuthMode(),
 
